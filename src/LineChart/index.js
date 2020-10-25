@@ -42,15 +42,15 @@ const build = (data) => {
     createSummaryTable(chartId, states);
 
     const dataSelection = lineChartConfig.domain
-      ? states.filter((d) => {
-          return (
+      ? states.filter(
+          (d) =>
             d.date?.valueOf() >= lineChartConfig.domain[0]?.valueOf() &&
             d.date?.valueOf() <= lineChartConfig.domain[1]?.valueOf()
-          );
-        })
+        )
       : states;
 
     createLineChart({
+      // eslint-disable-next-line no-use-before-define
       updateConfig,
       data: dataSelection,
       ...lineChartOptions,
