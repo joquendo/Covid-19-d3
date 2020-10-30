@@ -35,9 +35,13 @@ const build = (data) => {
     const states = data.states[lineChartConfig.state];
     const { accum } = lineChartConfig;
     lineChartOptions.yProperty = accum ? 'cases_accum' : 'cases';
-    lineChartOptions.lines[0].property = accum ? 'cases_accum' : 'cases';
-    lineChartOptions.lines[1].property = accum ? 'deaths_accum' : 'deaths';
     lineChartOptions.area.property = accum ? 'cases_accum' : 'cases';
+
+    if (lineChartOptions.lines) {
+      lineChartOptions.lines.forEach((line) => {
+        line.property = accum ? `${line.property}_accum` : line.property.replace('_accum', '');
+      });
+    }
 
     createSummaryTable(chartId, states);
 
@@ -65,6 +69,22 @@ const build = (data) => {
     buildChart();
   };
 
+  const toggleLine = (option) => {
+    let lineCategory;
+    let show;
+
+    for (const key of option) {
+      lineCategory = key;
+      show = option[key];
+    }
+
+    lineChartOptions.lines.forEach((line) => {
+      if (line.property) {
+        // get line
+      }
+    });
+  };
+
   addContainer(chartId);
   createSelectBox(
     chartId,
@@ -74,6 +94,9 @@ const build = (data) => {
   );
 
   createCheckBox(chartId, 'accum', 'Show Cumulative', updateConfig);
+  createCheckBox(chartId, 'deaths', 'Show Deaths Only', toggleLine);
+  createCheckBox(chartId, 'cases', 'Show Cases Only', toggleLine);
+
   initSummaryTable(chartId);
   const _data = data.states[lineChartConfig.state];
   initLineChart(chartId, { ...lineChartOptions, data: _data, updateConfig });
